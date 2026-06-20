@@ -34,7 +34,7 @@ def get_user_tracks(sp, user_id, max_tracks=30):
         try:
             results = sp.playlist_tracks(playlist_id, limit=remaining)
             for item in results.get('items', []):
-                track = item.get('track')
+                track = item.get('track') or item.get('item')
                 if not track:
                     continue
                 track_name = track['name']
