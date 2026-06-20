@@ -5,7 +5,7 @@ import requests
 import json
 from dotenv import load_dotenv
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyOAuth
 
 load_dotenv()
 
@@ -62,7 +62,12 @@ def analyze_music_taste(sarki_listesi_str):
 def main():
     client_id = os.getenv("SPOTIPY_CLIENT_ID")
     client_secret = os.getenv("SPOTIPY_CLIENT_SECRET")
-    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=client_id, client_secret=client_secret))
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri="http://127.0.0.1:8888/callback",
+        scope="playlist-read-private playlist-read-collaborative"
+    ))
     profile_input = input("Spotify Profil Linkini girin: ")
     user_id = extract_user_id(profile_input)
     tracks = get_user_tracks(sp, user_id, 30)
